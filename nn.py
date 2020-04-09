@@ -61,21 +61,22 @@ class Module(object):
 
     def transfer_to_pytorch_model(self, sess, pth_model):
         for key, val in self._modules.items():
-            #print(key, val)
+            # print(key, val)
             pth_submod = getattr(pth_model, key)
-            if isinstance(pth_submod, tnn.Module): 
+            if isinstance(pth_submod, tnn.Module):
                 val.transfer_to_pytorch_model(sess, pth_submod)
             else:
                 raise ValueError('Models do not match.')
 
     def transfer_from_pytorch_model(self, sess, pth_model):
         for key, val in self._modules.items():
-            #print(key, val)
+            # print(key, val)
             pth_submod = getattr(pth_model, key)
-            if isinstance(pth_submod, tnn.Module): 
+            if isinstance(pth_submod, tnn.Module):
                 val.transfer_from_pytorch_model(sess, pth_submod)
             else:
                 raise ValueError('Models do not match.')
+
 
 class Linear(Module):
     counter = 0
@@ -87,7 +88,7 @@ class Linear(Module):
 
         if initializer is None:
             stdv = 1. / math.sqrt(self.in_features)
-            initializer=tf.random_uniform_initializer(minval=-stdv, maxval=stdv)
+            initializer = tf.random_uniform_initializer(minval=-stdv, maxval=stdv)
 
         self.scope = "Linear_{0}".format(Linear.counter)
         with tf.variable_scope(self.scope, initializer=initializer):
@@ -103,13 +104,14 @@ class Linear(Module):
 
     def forward(self, x):
         with tf.variable_scope(self.scope):
-            outputs = tf.tensordot(x, self.weight, [[-1],[0]])
+            outputs = tf.tensordot(x, self.weight, [[-1], [0]])
             if self.bias is not None:
                 outputs = tf.nn.bias_add(outputs, self.bias)
         return outputs
 
     def __repr__(self):
-        return 'Linear(in_features={0}, out_features={1}, bias={2})'.format(self.in_features, self.out_features, self.bias is not None)
+        return 'Linear(in_features={0}, out_features={1}, bias={2})'.format(self.in_features, self.out_features,
+                                                                            self.bias is not None)
 
     def transfer_to_pytorch_model(self, sess, pth_model):
         if isinstance(pth_model, tnn.Linear):
@@ -191,7 +193,7 @@ class Softplus(Module):
         super(Softplus, self).__init__()
 
     def forward(self, x):
-        return tf.nn.softplus(x+1)-1
+        return tf.nn.softplus(x + 1) - 1
 
     def __repr__(self):
         return 'Softplus()'

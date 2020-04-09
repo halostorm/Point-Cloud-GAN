@@ -16,14 +16,14 @@ for line in smi_output.split('\n'):
     query_results = line.split(',')
     g = {col_name: col_value.strip() for (col_name, col_value) in zip(gpu_query_columns, query_results)}
     gpu_list.append(g)
-free_mem = {int(g['index']):int(g['memory.total'])-int(g['memory.used']) for g in gpu_list}
+free_mem = {int(g['index']): int(g['memory.total']) - int(g['memory.used']) for g in gpu_list}
 
 np_free_mem = np.zeros(len(gpu_list))
 for i in range(len(gpu_list)):
     np_free_mem[i] = free_mem[i]
 min_idx = np.argmax(np_free_mem)
 
-if np_free_mem[min_idx]< 1000:
+if np_free_mem[min_idx] < 1000:
     print('WARNING: No GPU entirely free!')
 
 print('Using GPU {0}'.format(min_idx))

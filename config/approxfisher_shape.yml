@@ -14,7 +14,7 @@ z2_dim: 10
 weight_clip: 0.2
 add_noise: False
 kernel: l2
-data_file: /home/chunlial/ModelNet40_cloud.h5
+data_file: ModelNet40_cloud.h5
 obj: multi40
 base: 1.0
 pool: max1
